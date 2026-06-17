@@ -277,10 +277,6 @@ function ThreadPane({
             </div>
           </div>
         </div>
-
-        <div style={{ fontSize: 12, color: '#9ca3b0', whiteSpace: 'nowrap' }}>
-          {followers} followers
-        </div>
       </div>
 
       {/* Thread body — scrollable */}
