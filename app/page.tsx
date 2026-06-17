@@ -845,85 +845,102 @@ export default function Activity() {
       style={{
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         background: '#f7f8fa',
-        minHeight: '100vh',
+        height: '100vh',
         display: 'flex',
         justifyContent: 'center',
-        padding: '24px 16px',
         boxSizing: 'border-box',
+        overflow: 'hidden',
       }}
     >
-      <div style={{ width: '100%', maxWidth: 620, display: 'flex', flexDirection: 'column', gap: 0 }}>
-
-        {/* ── Always-visible header ── */}
-        <div style={{ marginBottom: 16 }}>
-          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#1a1a2e', letterSpacing: -0.3 }}>
-            Activity
-          </h2>
-        </div>
-
-        {/* ── Always-visible tabs ── */}
+      <div
+        style={{
+          width: '100%',
+          maxWidth: 620,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          overflow: 'hidden',
+        }}
+      >
+        {/* ── Sticky header + tabs ── */}
         <div
           style={{
-            display: 'flex',
-            gap: 2,
-            background: '#eff1f5',
-            borderRadius: 9,
-            padding: 3,
-            marginBottom: 16,
-            width: 'fit-content',
+            flexShrink: 0,
+            background: '#f7f8fa',
+            padding: '20px 20px 0',
+            zIndex: 10,
           }}
         >
-          {tabs.map(t => (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              style={{
-                background: tab === t.key ? '#fff' : 'transparent',
-                border: 'none',
-                borderRadius: 7,
-                padding: '6px 14px',
-                fontSize: 13,
-                fontWeight: tab === t.key ? 600 : 500,
-                color: tab === t.key ? '#1a1a2e' : '#6b7280',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 5,
-                boxShadow: tab === t.key ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                transition: 'all 0.15s',
-              }}
-            >
-              {t.label}
-              {t.count !== undefined && (
-                <span
-                  style={{
-                    background: tab === t.key ? '#e8f0fe' : '#e5e7eb',
-                    color: tab === t.key ? '#4a90d9' : '#9ca3b0',
-                    borderRadius: 10,
-                    padding: '0 6px',
-                    fontSize: 11,
-                    fontWeight: 600,
-                    minWidth: 18,
-                    textAlign: 'center',
-                    lineHeight: '18px',
-                    display: 'inline-block',
-                  }}
-                >
-                  {t.count}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
+          <h2 style={{ margin: '0 0 14px', fontSize: 18, fontWeight: 700, color: '#1a1a2e', letterSpacing: -0.3 }}>
+            Activity
+          </h2>
 
-        {/* ── Feed area with thread pane overlay ── */}
-        <div style={{ position: 'relative', flex: 1 }}>
-          {/* Feed content */}
           <div
             style={{
               display: 'flex',
+              gap: 2,
+              background: '#eff1f5',
+              borderRadius: 9,
+              padding: 3,
+              marginBottom: 14,
+              width: 'fit-content',
+            }}
+          >
+            {tabs.map(t => (
+              <button
+                key={t.key}
+                onClick={() => setTab(t.key)}
+                style={{
+                  background: tab === t.key ? '#fff' : 'transparent',
+                  border: 'none',
+                  borderRadius: 7,
+                  padding: '6px 14px',
+                  fontSize: 13,
+                  fontWeight: tab === t.key ? 600 : 500,
+                  color: tab === t.key ? '#1a1a2e' : '#6b7280',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 5,
+                  boxShadow: tab === t.key ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
+                  transition: 'all 0.15s',
+                }}
+              >
+                {t.label}
+                {t.count !== undefined && (
+                  <span
+                    style={{
+                      background: tab === t.key ? '#e8f0fe' : '#e5e7eb',
+                      color: tab === t.key ? '#4a90d9' : '#9ca3b0',
+                      borderRadius: 10,
+                      padding: '0 6px',
+                      fontSize: 11,
+                      fontWeight: 600,
+                      minWidth: 18,
+                      textAlign: 'center',
+                      lineHeight: '18px',
+                      display: 'inline-block',
+                    }}
+                  >
+                    {t.count}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Scrollable feed area with thread pane overlay ── */}
+        <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: 0 }}>
+          <div
+            style={{
+              height: '100%',
+              overflowY: 'auto',
+              padding: '4px 20px 12px',
+              display: 'flex',
               flexDirection: 'column',
               gap: 12,
+              boxSizing: 'border-box',
               visibility: threadEntry ? 'hidden' : 'visible',
               pointerEvents: threadEntry ? 'none' : 'auto',
             }}
@@ -973,14 +990,11 @@ export default function Activity() {
                   ) : null
                 )
               ))}
-
-            {/* Spacer so thread pane has height to fill */}
-            <div style={{ height: 200 }} />
           </div>
 
-          {/* Thread pane — overlays only the feed area */}
+          {/* Thread pane — overlays the scrollable feed only */}
           {threadEntry && (
-            <div style={{ position: 'absolute', inset: 0, minHeight: 400 }}>
+            <div style={{ position: 'absolute', inset: 0 }}>
               <ThreadPane
                 entry={threadEntry}
                 onClose={() => setThreadId(null)}
@@ -990,9 +1004,17 @@ export default function Activity() {
           )}
         </div>
 
-        {/* ── Always-visible comment input ── */}
+        {/* ── Sticky comment input ── */}
         {(tab === 'all' || tab === 'comments') && (
-          <div style={{ marginTop: 16 }}>
+          <div
+            style={{
+              flexShrink: 0,
+              padding: '10px 20px 20px',
+              background: '#f7f8fa',
+              borderTop: '1px solid #eef0f3',
+              zIndex: 10,
+            }}
+          >
             <NewCommentInput onPost={addComment} />
           </div>
         )}
