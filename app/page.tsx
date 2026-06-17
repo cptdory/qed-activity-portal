@@ -303,11 +303,6 @@ function ThreadPane({
             <p style={{ margin: 0, fontSize: 13.5, color: '#374151', lineHeight: 1.6 }}>
               {mentionify(entry.text)}
             </p>
-            {/* Reaction row */}
-            <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
-              <button style={reactionBtn}>👍</button>
-              <button style={reactionBtn}>😄</button>
-            </div>
           </div>
         </div>
 
@@ -333,10 +328,6 @@ function ThreadPane({
               <p style={{ margin: 0, fontSize: 13.5, color: '#374151', lineHeight: 1.6 }}>
                 {mentionify(r.text)}
               </p>
-              <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
-                <button style={reactionBtn}>👍</button>
-                <button style={reactionBtn}>😄</button>
-              </div>
             </div>
           </div>
         ))}
@@ -553,8 +544,6 @@ function CommentCard({
 
       {/* Actions */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingLeft: 44 }}>
-        <button style={reactionBtn}>👍</button>
-        <button style={reactionBtn}>😄</button>
         <button
           onClick={() => onOpenThread(entry.id)}
           style={{
